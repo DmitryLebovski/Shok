@@ -53,8 +53,14 @@ dependencies {
     implementation(libs.androidx.material3)
 
     implementation(libs.androidx.navigation.compose)
+    implementation (libs.retrofit)
+    implementation(libs.converter.gson)
     implementation(libs.dagger)
+    implementation(libs.androidx.datastore.preferences)
+
     implementation(project(":features"))
+    implementation(project(":data"))
+    implementation(libs.androidx.datastore.core.android)
     kapt(libs.dagger.compiler)
 
     testImplementation(libs.junit)
