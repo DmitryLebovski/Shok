@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sign_in">Войти</string>
+    <string name="back">Назад</string>
+    <string name="notifications">Уведомления</string>
+</resources>

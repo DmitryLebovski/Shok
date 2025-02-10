@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Shok"
 include(":app")
- 
+include(":data")
+include(":domain")
+include(":features")
