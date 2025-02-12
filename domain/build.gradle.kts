@@ -1,7 +1,9 @@
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
+    id("kotlin-kapt")
 }
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -14,4 +16,10 @@ kotlin {
 
 dependencies {
     implementation(libs.gson)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

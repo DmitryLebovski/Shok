@@ -1,6 +1,6 @@
 package com.example.data
 
-import com.example.domain.auth.Token
+import com.example.domain.token.Token
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

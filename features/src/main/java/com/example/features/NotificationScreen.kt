@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun NotificationScreen (
     navigate: () -> Unit,
-    accessToken: String
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(top = 32.dp),

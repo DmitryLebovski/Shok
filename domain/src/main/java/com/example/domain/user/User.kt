@@ -2,7 +2,7 @@ package com.example.domain.user
 
 import com.google.gson.annotations.SerializedName
 
-data class UserInfo (
+data class User (
     @SerializedName("isClient"                 ) var isClient                 : Boolean?,
     @SerializedName("guid"                     ) var guid                     : String?,
     @SerializedName("language"                 ) var language                 : String?,

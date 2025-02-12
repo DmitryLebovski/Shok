@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
-
 }
 
 android {
@@ -55,12 +54,13 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(libs.dagger)
     implementation(libs.androidx.datastore.preferences)
 
     implementation(project(":features"))
     implementation(project(":data"))
     implementation(libs.androidx.datastore.core.android)
+    implementation(libs.dagger)
+    implementation(project(":domain"))
     kapt(libs.dagger.compiler)
 
     testImplementation(libs.junit)

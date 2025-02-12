@@ -2,14 +2,15 @@ package com.example.shok
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.features.auth_screen.AuthScreen
 import com.example.features.NotificationScreen
-import com.example.features.UserScreen
-import com.example.features.auth_screen.AuthViewModel
+import com.example.features.user_screen.UserScreen
 import com.example.shok.Routes.AUTH_SCREEN
 import com.example.shok.Routes.NOTIFICATION_SCREEN
 import com.example.shok.Routes.USER_SCREEN
@@ -20,11 +21,11 @@ object Routes {
     const val NOTIFICATION_SCREEN = "NotificationScreen"
 }
 
+
 @Composable
-fun AppNavigation(
-    authViewModel: AuthViewModel
-) {
+fun AppNavigation() {
     val navController = rememberNavController()
+    val app = LocalContext.current.applicationContext as ShokApp
 
     NavHost(
         navController = navController,
@@ -32,20 +33,22 @@ fun AppNavigation(
         modifier = Modifier.fillMaxSize()
     ) {
         composable(AUTH_SCREEN) {
+            val authComponent = remember { app.appComponent.authSubcomponent().create() }
             AuthScreen(
-                viewModel = authViewModel,
                 navigate = {
                     navController.navigate(USER_SCREEN)
-                }
+                },
+                component = authComponent
             )
         }
 
         composable(USER_SCREEN) {
+            val userComponent = remember { app.appComponent.userSubcomponent().create() }
             UserScreen(
                 navigate = {
                     navController.navigate(NOTIFICATION_SCREEN)
                 },
-                accessToken = "someth"
+                component = userComponent
             )
         }
 
@@ -53,8 +56,7 @@ fun AppNavigation(
             NotificationScreen(
                 navigate = {
                     navController.popBackStack()
-                },
-                accessToken = "someth"
+                }
             )
         }
     }

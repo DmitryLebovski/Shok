@@ -1,4 +1,4 @@
-package com.example.domain.auth
+package com.example.domain.token
 
 import com.google.gson.annotations.SerializedName
 

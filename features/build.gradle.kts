@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
 }
 
 android {
@@ -48,4 +49,14 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.datastore.preferences)
+    implementation(libs.okhttp)
+
+
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

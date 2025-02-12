@@ -13,20 +13,28 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.datastore.preferences.preferencesDataStore
+import com.example.domain.token.TokenRepository
 import com.example.features.R
+import kotlinx.coroutines.runBlocking
+import okhttp3.Interceptor
 
 @Composable
 fun AuthScreen(
-    viewModel: AuthViewModel,
-    navigate: ()-> Unit
+    navigate: ()-> Unit,
+    component: ProviderAuthViewModel
 ) {
     val context = LocalContext.current
+    val viewModel = remember { component.authViewModel() }
+
+    context.getAuthCode()?.let { viewModel.setAuthCode(it) }
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -36,9 +44,8 @@ fun AuthScreen(
 
         LaunchedEffect(viewModel.authCode) {
             viewModel.authCode.value?.let { code ->
-                Log.d("CODECODE", code)
-                //todo запрос токена
-                //todo сохранение токена
+                Log.d("CODEX", code)
+                context.saveAuthCode(code)
                 navigate()
             }
         }
@@ -65,4 +72,35 @@ fun Context.launchCustomTabs(url: String, useIncognito: Boolean?) {
         }
     }
         .launchUrl(this, Uri.parse(url))
+}
+
+
+val Context.dataStore by preferencesDataStore("settings")
+object DataStoreManager {
+    fun customAuthInterceptor(tokenRepository: TokenRepository): Interceptor {
+        return Interceptor { chain ->
+            val token = runBlocking {
+                tokenRepository.getToken()
+            }
+            Log.d("CODEXTOKENINTERCEPTOR", token.toString())
+
+            val requestBuilder = chain.request().newBuilder()
+            if (!token?.accessToken.isNullOrEmpty()) {
+                requestBuilder.addHeader("Authorization", "Bearer ${token?.accessToken}")
+            }
+            chain.proceed(requestBuilder.build())
+        }
+    }
+}
+
+fun Context.saveAuthCode(code: String) {
+    getSharedPreferences("auth", Context.MODE_PRIVATE)
+        .edit()
+        .putString("auth_code", code)
+        .apply()
+}
+
+fun Context.getAuthCode(): String? {
+    return getSharedPreferences("auth", Context.MODE_PRIVATE)
+        .getString("auth_code", null)
 }
