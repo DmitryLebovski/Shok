@@ -22,11 +22,13 @@
             android:theme="@style/Theme.Shok">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" /> <!-- будет значок на главном экране -->
+            </intent-filter>
 
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" /> <!-- для открытия ссылок через приложение -->
+                <category android:name="android.intent.category.DEFAULT" /> <!-- для работы с URI схемами -->
+                <category android:name="android.intent.category.BROWSABLE" /> <!-- открытие ссылок из браузера -->
                 <data android:scheme="bellerage" android:host="mobilelogin" />
             </intent-filter>
         </activity>

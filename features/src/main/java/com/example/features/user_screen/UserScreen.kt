@@ -51,16 +51,8 @@ fun UserScreen(
             }
         }
 
-        is UiState.Loading -> { LoadingScreen() }
-        is UiState.Error -> {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("failure")
-            }
-        }
+        is UiState.Loading -> LoadingScreen()
+        is UiState.Error -> ErrorScreen()
     }
 }
 
@@ -72,5 +64,16 @@ fun LoadingScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun ErrorScreen() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("failure")
     }
 }

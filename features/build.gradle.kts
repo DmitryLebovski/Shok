@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.datastore.preferences)
     implementation(libs.okhttp)
+    implementation(libs.androidx.paging.compose)
 
 
     implementation(libs.dagger)

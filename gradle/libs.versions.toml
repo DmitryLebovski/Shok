@@ -18,6 +18,7 @@ material = "1.12.0"
 navigationCompose = "2.8.6"
 okhhtp = "4.9.0"
 okhttp = "4.11.0"
+pagingCompose = "3.3.5"
 retrofit = "2.9.0"
 browser = "1.8.0"
 datastoreCoreAndroid = "1.1.2"
@@ -26,6 +27,7 @@ datastoreCoreAndroid = "1.1.2"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }

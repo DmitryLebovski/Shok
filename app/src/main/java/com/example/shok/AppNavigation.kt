@@ -9,7 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.features.auth_screen.AuthScreen
-import com.example.features.NotificationScreen
+import com.example.features.notification_screen.NotificationScreen
 import com.example.features.user_screen.UserScreen
 import com.example.shok.Routes.AUTH_SCREEN
 import com.example.shok.Routes.NOTIFICATION_SCREEN
@@ -53,10 +53,12 @@ fun AppNavigation() {
         }
 
         composable(NOTIFICATION_SCREEN) {
+            val notificationComponent = remember { app.appComponent.notificationSubComponent().create() }
             NotificationScreen(
                 navigate = {
                     navController.popBackStack()
-                }
+                },
+                component = notificationComponent
             )
         }
     }

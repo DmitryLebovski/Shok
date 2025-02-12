@@ -10,7 +10,10 @@ import javax.inject.Singleton
 
 
 @Singleton
-@Component(modules = [AppModule::class, AuthViewModelModule::class, UserViewModelModule::class])
+@Component(modules = [
+    AppModule::class,
+    AuthViewModelModule::class,
+    UserViewModelModule::class])
 interface AppComponent {
     @Component.Factory
     interface Factory {
@@ -19,4 +22,5 @@ interface AppComponent {
 
     fun authSubcomponent(): AuthSubcomponent.Factory
     fun userSubcomponent(): UserSubcomponent.Factory
+    fun notificationSubComponent(): NotificationSubcomponent.Factory
 }
