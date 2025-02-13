@@ -8,9 +8,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.features.auth_screen.AuthScreen
-import com.example.features.notification_screen.NotificationScreen
-import com.example.features.user_screen.UserScreen
+import com.example.auth.AuthScreen
+import com.example.notifications.NotificationScreen
+import com.example.user.UserScreen
 import com.example.shok.Routes.AUTH_SCREEN
 import com.example.shok.Routes.NOTIFICATION_SCREEN
 import com.example.shok.Routes.USER_SCREEN

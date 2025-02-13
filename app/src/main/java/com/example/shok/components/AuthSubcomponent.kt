@@ -1,6 +1,6 @@
 package com.example.shok.components
 
-import com.example.features.auth_screen.ProviderAuthViewModel
+import com.example.auth.ProviderAuthViewModel
 import com.example.shok.di.AuthViewModelModule
 import dagger.Subcomponent
 

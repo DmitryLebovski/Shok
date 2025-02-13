@@ -4,12 +4,13 @@ import android.app.Application
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import com.example.data.AuthApi
-import com.example.data.BOApi
+import com.example.auth.AuthApi
 import com.example.data.token.TokenRepositoryImpl
 import com.example.domain.token.TokenRepository
-import com.example.features.auth_screen.DataStoreManager.customAuthInterceptor
-import com.example.features.auth_screen.dataStore
+import com.example.auth.DataStoreManager.customAuthInterceptor
+import com.example.auth.dataStore
+import com.example.notifications.NotificationApi
+import com.example.user.UserApi
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -57,8 +58,14 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideBOApi(@Named("Client") retrofit: Retrofit): BOApi = retrofit.create(
-        BOApi::class.java
+    fun provideUserApi(@Named("Client") retrofit: Retrofit): UserApi = retrofit.create(
+        UserApi::class.java
+    )
+
+    @Provides
+    @Singleton
+    fun provideNotificationApi(@Named("Client") retrofit: Retrofit): NotificationApi = retrofit.create(
+        NotificationApi::class.java
     )
 
     @Provides

@@ -1,6 +1,6 @@
 package com.example.shok.components
 
-import com.example.features.notification_screen.ProviderNotificationViewModel
+import com.example.notifications.ProviderNotificationViewModel
 import com.example.shok.di.UserViewModelModule
 import dagger.Subcomponent
 

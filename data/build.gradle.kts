@@ -17,4 +17,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(libs.retrofit)
     implementation(libs.datastore.preferences)
+    implementation(project(":domain:auth"))
+    implementation(project(":domain:user"))
+    implementation(project(":domain:notifications"))
 }

@@ -1,8 +1,8 @@
 package com.example.shok.di
 
-import com.example.data.AuthApi
-import com.example.data.auth.AuthRepositoryImpl
-import com.example.domain.auth.AuthRepository
+import com.example.auth.AuthRepository
+import com.example.auth.AuthRepositoryImpl
+import com.example.auth.AuthApi
 import dagger.Module
 import dagger.Provides
 

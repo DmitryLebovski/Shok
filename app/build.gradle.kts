@@ -58,11 +58,17 @@ dependencies {
 
     implementation(project(":features"))
     implementation(project(":data"))
-    implementation(libs.androidx.datastore.core.android)
-    implementation(libs.dagger)
     implementation(project(":domain"))
-    kapt(libs.dagger.compiler)
-
+    implementation(project(":features:auth"))
+    implementation(project(":features:notifications"))
+    implementation(project(":features:user"))
+    implementation(project(":domain:user"))
+    implementation(project(":data:user"))
+    implementation(project(":domain:auth"))
+    implementation(project(":data:auth"))
+    implementation(libs.androidx.datastore.core.android)
+    implementation(project(":data:notifications"))
+    implementation(project(":domain:notifications"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,6 +76,9 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 }
 
 kapt {

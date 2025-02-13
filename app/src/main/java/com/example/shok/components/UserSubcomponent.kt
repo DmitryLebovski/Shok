@@ -1,6 +1,6 @@
 package com.example.shok.components
 
-import com.example.features.user_screen.ProviderUserViewModel
+import com.example.user.ProviderUserViewModel
 import com.example.shok.di.UserViewModelModule
 import dagger.Subcomponent
 

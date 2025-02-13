@@ -9,7 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.features.auth_screen.saveAuthCode
+import com.example.auth.saveAuthCode
 import com.example.shok.ui.theme.ShokTheme
 
 class MainActivity : ComponentActivity() {
