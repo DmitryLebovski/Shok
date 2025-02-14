@@ -55,7 +55,7 @@ fun AppNavigation() {
                         popUpTo(USER_SCREEN) { inclusive = true }
                     }
                 },
-                component = userComponent
+                provider = userComponent
             )
         }
 
@@ -70,7 +70,7 @@ fun AppNavigation() {
                         popUpTo(NOTIFICATION_SCREEN) { inclusive = true }
                     }
                 },
-                component = notificationComponent
+                provider = notificationComponent
             )
         }
     }

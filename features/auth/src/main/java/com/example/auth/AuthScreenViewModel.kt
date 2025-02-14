@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 class AuthScreenViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
     private val authRepository: AuthRepository
