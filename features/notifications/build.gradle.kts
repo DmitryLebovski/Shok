@@ -43,8 +43,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(project(":domain"))
-    implementation(project(":features:user"))
     implementation(project(":domain:notifications"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

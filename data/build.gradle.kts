@@ -13,8 +13,6 @@ kotlin {
     }
 }
 dependencies {
-
-    implementation(project(":domain"))
     implementation(libs.retrofit)
     implementation(libs.datastore.preferences)
     implementation(project(":domain:auth"))

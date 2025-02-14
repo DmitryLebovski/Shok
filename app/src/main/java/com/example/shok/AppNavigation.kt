@@ -36,7 +36,9 @@ fun AppNavigation() {
             val authComponent = remember { app.appComponent.authSubcomponent().create() }
             AuthScreen(
                 navigate = {
-                    navController.navigate(USER_SCREEN)
+                    navController.navigate(USER_SCREEN) {
+                        popUpTo(AUTH_SCREEN) { inclusive = true }
+                    }
                 },
                 component = authComponent
             )
@@ -45,8 +47,13 @@ fun AppNavigation() {
         composable(USER_SCREEN) {
             val userComponent = remember { app.appComponent.userSubcomponent().create() }
             UserScreen(
-                navigate = {
+                navigateToNotifications = {
                     navController.navigate(NOTIFICATION_SCREEN)
+                },
+                navigateIfTokenExpired = {
+                    navController.navigate(AUTH_SCREEN) {
+                        popUpTo(USER_SCREEN) { inclusive = true }
+                    }
                 },
                 component = userComponent
             )
@@ -55,8 +62,13 @@ fun AppNavigation() {
         composable(NOTIFICATION_SCREEN) {
             val notificationComponent = remember { app.appComponent.notificationSubComponent().create() }
             NotificationScreen(
-                navigate = {
+                navigateBack = {
                     navController.popBackStack()
+                },
+                navigateIfTokenExpired = {
+                    navController.navigate(AUTH_SCREEN) {
+                        popUpTo(NOTIFICATION_SCREEN) { inclusive = true }
+                    }
                 },
                 component = notificationComponent
             )

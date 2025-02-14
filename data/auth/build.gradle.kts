@@ -12,9 +12,9 @@ kotlin {
     }
 }
 dependencies {
-    implementation(project(":data"))
-    implementation(project(":domain"))
     implementation(project(":domain:auth"))
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.datastore.preferences)
+    implementation(libs.androidx.datastore)
 }

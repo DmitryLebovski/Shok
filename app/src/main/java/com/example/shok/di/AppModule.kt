@@ -5,8 +5,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.example.auth.AuthApi
-import com.example.data.token.TokenRepositoryImpl
-import com.example.domain.token.TokenRepository
+import com.example.auth.AuthRepository
 import com.example.auth.DataStoreManager.customAuthInterceptor
 import com.example.auth.dataStore
 import com.example.notifications.NotificationApi
@@ -43,10 +42,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(
-        tokenRepository: TokenRepository
+        authRepository: AuthRepository
     ): OkHttpClient {
         return OkHttpClient.Builder()
-            .addInterceptor(customAuthInterceptor(tokenRepository))
+            .addInterceptor(customAuthInterceptor(authRepository))
             .build()
     }
 
@@ -77,9 +76,4 @@ object AppModule {
     @Singleton
     fun providePreferencesDataStore(context: Context): DataStore<Preferences> =
         context.dataStore
-
-    @Provides
-    @Singleton
-    fun provideTokenRepository(dataStore: DataStore<Preferences>): TokenRepository =
-        TokenRepositoryImpl(dataStore)
 }

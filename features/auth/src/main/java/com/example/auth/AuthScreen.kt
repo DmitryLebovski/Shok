@@ -16,6 +16,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +27,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.preferencesDataStore
 import com.example.auth.BuildConfig.*
-import com.example.domain.token.TokenRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 
@@ -36,13 +37,17 @@ fun AuthScreen(
 ) {
     val context = LocalContext.current
     val viewModel = remember { component.authViewModel() }
+    val token by viewModel.token.collectAsState()
 
-    context.getAuthCode()?.let { viewModel.setAuthCode(it) }
+    LaunchedEffect(token) {
+        context.getAuthCode()?.let {
+            viewModel.loadToken(it)
+            Log.d("CODEXCODE", it)
+        }
 
-    LaunchedEffect(viewModel.authCode) {
-        viewModel.authCode.value?.let { code ->
-            Log.d("CODEX", code)
-            navigate() //TODO переделать адекватно
+        if (!token.isNullOrEmpty()) {
+            Log.d("CODEXCODEX", "NAVIGATE")
+            navigate()
         }
     }
 
@@ -71,6 +76,7 @@ fun AuthScreen(
     }
 }
 
+
 fun Context.launchCustomTabs(url: String, useIncognito: Boolean?) {
     CustomTabsIntent.Builder().build().apply {
         if (useIncognito == true) {
@@ -86,10 +92,10 @@ fun Context.launchCustomTabs(url: String, useIncognito: Boolean?) {
 
 val Context.dataStore by preferencesDataStore("settings")
 object DataStoreManager {
-    fun customAuthInterceptor(tokenRepository: TokenRepository): Interceptor {
+    fun customAuthInterceptor(authRepository: AuthRepository): Interceptor {
         return Interceptor { chain ->
             val token = runBlocking {
-                tokenRepository.getToken()
+                authRepository.getToken()
             }
             Log.d("CODEXTOKENINTERCEPTOR", token.toString())
 

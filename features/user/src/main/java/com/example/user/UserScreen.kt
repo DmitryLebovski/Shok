@@ -1,5 +1,6 @@
 package com.example.user
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,30 +23,49 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.domain.UiState
+import retrofit2.HttpException
 
 @Composable
 fun UserScreen(
-    navigate: () -> Unit,
+    navigateToNotifications: () -> Unit,
+    navigateIfTokenExpired: () -> Unit,
     component: ProviderUserViewModel
 ) {
     val viewModel = remember { component.userViewModel() }
-    val user by viewModel.userInfo.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
-        is UiState.Success -> {
+        is UsersUiState.Loading -> LoadingScreen()
+        is UsersUiState.Error -> {
+            val error = (uiState as UsersUiState.Error).error
+            Log.d("CODEXERROR", error.toString())
+            if (error is HttpException) { //todo() приходит пустой throwable
+                when(error.code()) {
+                    401 -> ErrorScreen()
+                    402 -> {
+                        navigateIfTokenExpired()
+                    }
+                }
+            }
+        }
+        is UsersUiState.Success -> {
+            val userData = (uiState as UsersUiState.Success).userData
+
             Column(
-                modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Button(
-                    onClick = { navigate() },
-                    modifier = Modifier.width(160.dp).height(50.dp).padding(top = 8.dp),
+                    onClick = { navigateToNotifications() },
+                    modifier = Modifier
+                        .width(160.dp)
+                        .height(50.dp)
+                        .padding(top = 8.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
-                )
-                {
+                ) {
                     Text(
                         stringResource(R.string.notifications),
                         modifier = Modifier
@@ -56,12 +76,9 @@ fun UserScreen(
 
                 Spacer(modifier = Modifier.padding(24.dp))
 
-                Text(user.toString())
+                Text(userData.toString())
             }
         }
-
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Error -> ErrorScreen()
     }
 }
 

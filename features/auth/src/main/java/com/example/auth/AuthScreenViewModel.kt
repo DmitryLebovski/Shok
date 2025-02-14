@@ -3,33 +3,31 @@ package com.example.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.domain.token.TokenRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 class AuthScreenViewModel @Inject constructor(
     private val getTokenUseCase: GetTokenUseCase,
-    private val tokenRepository: TokenRepository
+    private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val _authCode = MutableStateFlow<String?>(null)
-    val authCode: StateFlow<String?> = _authCode
 
-    fun setAuthCode(code: String) {
-        _authCode.value = code
-        loadToken()
-    }
+    private val _token = MutableStateFlow<String?>(null)
+    val token: StateFlow<String?> = _token
 
-    fun loadToken() {
+    fun loadToken(code: String) {
         viewModelScope.launch {
-            authCode.value?.let { code ->
+            if (authRepository.getToken()?.accessToken.isNullOrEmpty()) {
                 getTokenUseCase(code = code)
                     .onSuccess { token ->
                         try {
                             Log.d("CODEXCTOKEN", token?.accessToken.toString())
-                            token?.let { tokenRepository.saveToken(it) }
+                            token?.let {
+                                authRepository.saveToken(it)
+                            }
                         } catch (e: Exception) {
                             Log.d("AppError", e.toString())
                         }
@@ -38,6 +36,7 @@ class AuthScreenViewModel @Inject constructor(
                         Log.d("AppError", throwable.toString())
                     }
             }
+            _token.update { authRepository.getToken()?.accessToken }
         }
     }
 }

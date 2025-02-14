@@ -13,7 +13,6 @@ kotlin {
 }
 dependencies {
     implementation(project(":domain:user"))
-    implementation(project(":data"))
     implementation(project(":domain:notifications"))
     implementation (libs.retrofit)
     implementation(libs.converter.gson)

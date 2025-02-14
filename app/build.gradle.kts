@@ -55,10 +55,6 @@ dependencies {
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.androidx.datastore.preferences)
-
-    implementation(project(":features"))
-    implementation(project(":data"))
-    implementation(project(":domain"))
     implementation(project(":features:auth"))
     implementation(project(":features:notifications"))
     implementation(project(":features:user"))
