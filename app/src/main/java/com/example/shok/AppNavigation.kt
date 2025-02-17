@@ -40,7 +40,7 @@ fun AppNavigation() {
                         popUpTo(AUTH_SCREEN) { inclusive = true }
                     }
                 },
-                component = authComponent
+                provider = authComponent
             )
         }
 

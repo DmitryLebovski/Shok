@@ -16,4 +16,5 @@ dependencies {
     implementation(project(":domain:notifications"))
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(project(":core:error"))
 }

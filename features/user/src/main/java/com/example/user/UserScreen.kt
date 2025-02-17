@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import retrofit2.HttpException
+import com.example.error.HttpError
 
 @Composable
 fun UserScreen(
@@ -31,7 +31,8 @@ fun UserScreen(
     navigateIfTokenExpired: () -> Unit,
     provider: ProviderUserViewModel
 ) {
-    val viewModel = viewModel { provider.userViewModel() }
+    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase()) }
+
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -39,11 +40,12 @@ fun UserScreen(
         is UsersUiState.Error -> {
             val error = (uiState as UsersUiState.Error).error
             Log.d("CODEXERROR", error.toString())
-            if (error is HttpException) { //todo() приходит пустой throwable
-                when(error.code()) {
-                    401 -> ErrorScreen()
-                    402 -> {
-                        navigateIfTokenExpired()
+            when (error) {
+                is HttpError -> {
+                    when (error.code) {
+                        401 -> ErrorScreen(error.message.toString())
+                        404 -> ErrorScreen(error.message.toString())
+                        402 -> navigateIfTokenExpired()
                     }
                 }
             }
@@ -94,12 +96,12 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun ErrorScreen() {
+fun ErrorScreen(mes: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("failure")
+        Text("failure: $mes")
     }
 }

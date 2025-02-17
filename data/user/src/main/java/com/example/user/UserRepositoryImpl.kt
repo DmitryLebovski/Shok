@@ -1,5 +1,7 @@
 package com.example.user
 
+import com.example.error.ResponseHandler
+
 class UserRepositoryImpl(
     private val api: UserApi
 ) : UserRepository {
@@ -9,7 +11,7 @@ class UserRepositoryImpl(
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Throwable(response.message()))
+                Result.failure(ResponseHandler.handleResponse(response))
             }
         } catch (e: Exception) {
             Result.failure(e)

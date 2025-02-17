@@ -7,7 +7,6 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
-
 class AuthRepositoryImpl(
     private val api: AuthApi,
     private val dataStore: DataStore<Preferences>
@@ -22,7 +21,7 @@ class AuthRepositoryImpl(
             if (response.isSuccessful) {
                 Result.success(response.body())
             } else {
-                Result.failure(Throwable(response.message()))
+                Result.failure(Throwable(response.code().toString()))
             }
         } catch (e: Exception) {
             Result.failure(e)

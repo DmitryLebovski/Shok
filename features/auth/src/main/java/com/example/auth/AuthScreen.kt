@@ -18,7 +18,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +25,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.auth.BuildConfig.*
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
@@ -33,21 +33,26 @@ import okhttp3.Interceptor
 @Composable
 fun AuthScreen(
     navigate: ()-> Unit,
-    component: ProviderAuthViewModel
+    provider: ProviderAuthViewModel
 ) {
     val context = LocalContext.current
-    val viewModel = remember { component.authViewModel() }
+    val viewModel = viewModel {
+        AuthScreenViewModel(
+            provider.tokenUseCase(),
+            provider.authRepository()
+        )
+    }
     val token by viewModel.token.collectAsState()
 
     LaunchedEffect(token) {
         context.getAuthCode()?.let {
-            viewModel.loadToken(it)
             Log.d("CODEXCODE", it)
-        }
+            viewModel.loadToken(it)
 
-        if (!token.isNullOrEmpty()) {
-            Log.d("CODEXCODEX", "NAVIGATE")
-            navigate()
+            if (!token.isNullOrEmpty()) {
+                Log.d("CODEXCODEALREADY", "NAVIGATE")
+                navigate()
+            }
         }
     }
 

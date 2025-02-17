@@ -11,9 +11,3 @@ kotlin {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
-dependencies {
-    implementation(project(":domain:notifications"))
-    implementation (libs.retrofit)
-    implementation(libs.converter.gson)
-    implementation(project(":core:error"))
-}

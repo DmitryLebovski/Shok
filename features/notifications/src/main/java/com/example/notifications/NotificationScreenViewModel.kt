@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class NotificationScreenViewModel @Inject constructor(
+internal class NotificationScreenViewModel (
     private val getUserNotificationsUseCase: GetUserNotificationsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<NotificationsUiState>(NotificationsUiState.Loading)

@@ -6,9 +6,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class UserScreenViewModel @Inject constructor(
+internal class UserScreenViewModel (
     private val getInfoUseCase: GetUserInfoUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UsersUiState>(UsersUiState.Loading)

@@ -12,3 +12,4 @@ object UserViewModelModule {
     fun provideUserRepository(api: UserApi): UserRepository =
         UserRepositoryImpl(api)
 }
+

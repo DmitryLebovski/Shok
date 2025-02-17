@@ -1,5 +1,7 @@
 package com.example.notifications
 
+import com.example.error.ResponseHandler
+
 class NotificationsRepositoryImpl(
     private val api: NotificationApi
 ) : NotificationsRepository {
@@ -10,7 +12,7 @@ class NotificationsRepositoryImpl(
             if (response.isSuccessful) {
                 Result.success(response.body()!!)
             } else {
-                Result.failure(Throwable(response.message()))
+                Result.failure(ResponseHandler.handleResponse(response))
             }
         } catch (e: Exception) {
             Result.failure(e)

@@ -7,9 +7,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class AuthScreenViewModel @Inject constructor(
+class AuthScreenViewModel (
     private val getTokenUseCase: GetTokenUseCase,
     private val authRepository: AuthRepository
 ) : ViewModel() {
@@ -23,7 +22,7 @@ class AuthScreenViewModel @Inject constructor(
                 getTokenUseCase(code = code)
                     .onSuccess { token ->
                         try {
-                            Log.d("CODEXCTOKEN", token?.accessToken.toString())
+                            Log.d("CODEXGETTINGTOKEN", token?.accessToken.toString())
                             token?.let {
                                 authRepository.saveToken(it)
                             }
@@ -34,7 +33,7 @@ class AuthScreenViewModel @Inject constructor(
                     .onFailure { throwable ->
                         Log.d("AppError", throwable.toString())
                     }
-            }
+            } else Log.d("CODEXTOKENEXIST", "TRUE")
             _token.update { authRepository.getToken()?.accessToken }
         }
     }

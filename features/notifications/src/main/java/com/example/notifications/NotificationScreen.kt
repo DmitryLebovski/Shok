@@ -1,5 +1,6 @@
 package com.example.notifications
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import retrofit2.HttpException
+import com.example.error.HttpError
 
 @Composable
 fun NotificationScreen (
@@ -31,7 +32,7 @@ fun NotificationScreen (
     navigateIfTokenExpired: () -> Unit,
     provider: ProviderNotificationViewModel
 ) {
-    val viewModel = viewModel { provider.notificationViewModel() }
+    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase()) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -39,11 +40,13 @@ fun NotificationScreen (
         is NotificationsUiState.Loading -> LoadingScreen()
         is NotificationsUiState.Error -> {
             val error = (uiState as NotificationsUiState.Error).error
-            if (error is HttpException) {
-                when(error.code()) {
-                    401 -> ErrorScreen()
-                    402 -> {
-                        navigateIfTokenExpired()
+            Log.d("CODEXERROR", error.toString())
+            when (error) {
+                is HttpError -> {
+                    when (error.code) {
+                        401 -> ErrorScreen(error.message.toString())
+                        404 -> ErrorScreen(error.message.toString())
+                        402 -> navigateIfTokenExpired()
                     }
                 }
             }
@@ -110,12 +113,12 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun ErrorScreen() {
+fun ErrorScreen(mes: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("failure")
+        Text("failure: $mes")
     }
 }

@@ -1,5 +1,5 @@
 package com.example.user
 
 interface ProviderUserViewModel {
-    fun userViewModel(): UserScreenViewModel
+    fun infoUseCase(): GetUserInfoUseCase
 }
