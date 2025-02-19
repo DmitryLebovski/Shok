@@ -1,6 +1,6 @@
 package com.example.auth
 
-interface ProviderAuthViewModel {
+interface ProviderAuthUtils {
     fun tokenUseCase(): GetTokenUseCase
     fun authRepository(): AuthRepository
 }

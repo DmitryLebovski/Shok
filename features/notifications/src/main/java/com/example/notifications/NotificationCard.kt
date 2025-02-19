@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -37,31 +37,31 @@ fun NotificationCard(
                 .padding(end = 36.dp)
         ) {
             Text(
-                text = "Date: $date",
+                text = stringResource(R.string.date, date),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Unread: ${unread.toString()}",
+                text = stringResource(R.string.unread, unread),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Project Name: $projectName",
+                text = stringResource(R.string.project_name, projectName),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Request Subject: $requestSubject",
+                text = stringResource(R.string.request_subject, requestSubject),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Content: $content",
+                text = stringResource(R.string.content, content),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Type: $type",
+                text = stringResource(R.string.type, type),
                 modifier = Modifier.padding(top = 8.dp)
             )
             Text(
-                text = "Initiator: $initiator",
+                text = stringResource(R.string.initiator, initiator),
                 modifier = Modifier.padding(top = 8.dp)
             )
 

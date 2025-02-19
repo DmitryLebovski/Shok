@@ -1,11 +1,11 @@
 package com.example.shok.components
 
-import com.example.notifications.ProviderNotificationViewModel
-import com.example.shok.di.UserViewModelModule
+import com.example.notifications.ProviderNotificationUseCase
+import com.example.shok.di.NotificationViewModelModule
 import dagger.Subcomponent
 
-@Subcomponent(modules = [UserViewModelModule::class])
-interface NotificationSubcomponent: ProviderNotificationViewModel {
+@Subcomponent(modules = [NotificationViewModelModule::class])
+interface NotificationSubcomponent: ProviderNotificationUseCase {
 
     @Subcomponent.Factory
     interface Factory {

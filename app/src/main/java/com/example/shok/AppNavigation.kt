@@ -1,8 +1,16 @@
 package com.example.shok
 
+import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
@@ -21,26 +29,43 @@ object Routes {
     const val NOTIFICATION_SCREEN = "NotificationScreen"
 }
 
-
 @Composable
-fun AppNavigation() {
+fun AppNavigation(
+    code: String?
+) {
     val navController = rememberNavController()
     val app = LocalContext.current.applicationContext as ShokApp
+    val authComponent = remember { app.appComponent.authSubcomponent().create() }
+
+    var startDestination by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        val token = authComponent.authRepository().getToken()
+        startDestination = if (!token?.accessToken.isNullOrEmpty()) USER_SCREEN else AUTH_SCREEN
+        Log.d("CODEXSTARTDEST", startDestination.toString())
+    }
+
+    if (startDestination == null) {
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+        return
+    }
 
     NavHost(
         navController = navController,
-        startDestination = AUTH_SCREEN,
+        startDestination = startDestination!!,
         modifier = Modifier.fillMaxSize()
     ) {
         composable(AUTH_SCREEN) {
-            val authComponent = remember { app.appComponent.authSubcomponent().create() }
             AuthScreen(
                 navigate = {
                     navController.navigate(USER_SCREEN) {
                         popUpTo(AUTH_SCREEN) { inclusive = true }
                     }
                 },
-                provider = authComponent
+                provider = authComponent,
+                authCode = code
             )
         }
 

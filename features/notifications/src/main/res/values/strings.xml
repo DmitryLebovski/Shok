@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="back">Назад\n</string>
+    <string name="count">Count: %1$s</string>
+    <string name="page">Page: %1$s</string>
+    <string name="unknown">unknown</string>
+    <string name="failure">failure: %1$s</string>
+    <string name="date">Date: %1$s</string>
+    <string name="unread">Unread: %1$s</string>
+    <string name="project_name">Project Name: %1$s</string>
+    <string name="request_subject">Request Subject: %1$s</string>
+    <string name="content">Content: %1$s</string>
+    <string name="type">Type: %1$s</string>
+    <string name="initiator">Initiator: %1$s</string>
 </resources>

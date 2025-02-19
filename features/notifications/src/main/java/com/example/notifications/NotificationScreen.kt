@@ -30,7 +30,7 @@ import com.example.error.HttpError
 fun NotificationScreen (
     navigateBack: () -> Unit,
     navigateIfTokenExpired: () -> Unit,
-    provider: ProviderNotificationViewModel
+    provider: ProviderNotificationUseCase
 ) {
     val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase()) }
     val uiState by viewModel.uiState.collectAsState()
@@ -44,9 +44,8 @@ fun NotificationScreen (
             when (error) {
                 is HttpError -> {
                     when (error.code) {
-                        401 -> ErrorScreen(error.message.toString())
-                        404 -> ErrorScreen(error.message.toString())
                         402 -> navigateIfTokenExpired()
+                        else -> ErrorScreen(error.message.toString())
                     }
                 }
             }
@@ -76,9 +75,9 @@ fun NotificationScreen (
                     )
                 }
 
-                Text("Count: ${notifications.count.toString()}", modifier = Modifier.padding(vertical = 8.dp))
+                Text(stringResource(R.string.count, notifications.count.toString()), modifier = Modifier.padding(vertical = 8.dp))
 
-                Text("Page: ${notifications.page.toString()}", modifier = Modifier.padding(vertical = 8.dp))
+                Text(stringResource(R.string.page, notifications.page.toString()), modifier = Modifier.padding(vertical = 8.dp))
 
                 LazyColumn(
                     modifier = Modifier.padding(top = 16.dp),
@@ -86,13 +85,13 @@ fun NotificationScreen (
                 ) {
                     items(notifications.data) { data ->
                         NotificationCard(
-                            date = data.date ?: "unknown",
+                            date = data.date ?: stringResource(R.string.unknown),
                             unread = data.unread ?: false,
-                            projectName = data.projectName ?: "unknown",
-                            requestSubject = data.requestSubject ?: "unknown",
-                            content = data.content ?: "unknown",
-                            type = data.type ?: "unknown",
-                            initiator = data.initiator ?: "unknown"
+                            projectName = data.projectName ?: stringResource(R.string.unknown),
+                            requestSubject = data.requestSubject ?: stringResource(R.string.unknown),
+                            content = data.content ?: stringResource(R.string.unknown),
+                            type = data.type ?: stringResource(R.string.unknown),
+                            initiator = data.initiator ?: stringResource(R.string.unknown)
                         )
                     }
                 }
@@ -102,7 +101,7 @@ fun NotificationScreen (
 }
 
 @Composable
-fun LoadingScreen() {
+private fun LoadingScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -113,12 +112,12 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun ErrorScreen(mes: String) {
+private fun ErrorScreen(mes: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("failure: $mes")
+        Text(stringResource(R.string.failure, mes))
     }
 }

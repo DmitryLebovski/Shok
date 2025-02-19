@@ -33,7 +33,8 @@ import okhttp3.Interceptor
 @Composable
 fun AuthScreen(
     navigate: ()-> Unit,
-    provider: ProviderAuthViewModel
+    provider: ProviderAuthUtils,
+    authCode: String?
 ) {
     val context = LocalContext.current
     val viewModel = viewModel {
@@ -43,10 +44,11 @@ fun AuthScreen(
         )
     }
     val token by viewModel.token.collectAsState()
+    Log.d("CODEXCODE", authCode.toString())
+
 
     LaunchedEffect(token) {
-        context.getAuthCode()?.let {
-            Log.d("CODEXCODE", it)
+        authCode?.let {
             viewModel.loadToken(it)
 
             if (!token.isNullOrEmpty()) {
@@ -63,10 +65,7 @@ fun AuthScreen(
     ) {
 
         Button(
-            onClick = { context.launchCustomTabs(
-                url = AUTH_URL,
-                useIncognito = false
-            ) },
+            onClick = { context.launchCustomTabs(url = AUTH_URL) },
             modifier = Modifier.width(160.dp).height(40.dp),
             colors = ButtonDefaults.buttonColors(containerColor = Color.DarkGray)
         )
@@ -82,15 +81,8 @@ fun AuthScreen(
 }
 
 
-fun Context.launchCustomTabs(url: String, useIncognito: Boolean?) {
-    CustomTabsIntent.Builder().build().apply {
-        if (useIncognito == true) {
-            intent.putExtra(
-                "com.google.android.apps.chrome.EXTRA_OPEN_NEW_INCOGNITO_TAB",
-                true
-            )
-        }
-    }
+fun Context.launchCustomTabs(url: String) {
+    CustomTabsIntent.Builder().build()
         .launchUrl(this, Uri.parse(url))
 }
 
@@ -111,16 +103,4 @@ object DataStoreManager {
             chain.proceed(requestBuilder.build())
         }
     }
-}
-
-fun Context.saveAuthCode(code: String) {
-    getSharedPreferences("auth", Context.MODE_PRIVATE)
-        .edit()
-        .putString("auth_code", code)
-        .apply()
-}
-
-fun Context.getAuthCode(): String? {
-    return getSharedPreferences("auth", Context.MODE_PRIVATE)
-        .getString("auth_code", null)
 }

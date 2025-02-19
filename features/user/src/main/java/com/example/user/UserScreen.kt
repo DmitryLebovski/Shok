@@ -29,10 +29,9 @@ import com.example.error.HttpError
 fun UserScreen(
     navigateToNotifications: () -> Unit,
     navigateIfTokenExpired: () -> Unit,
-    provider: ProviderUserViewModel
+    provider: ProviderUserUseCase
 ) {
     val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase()) }
-
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -43,9 +42,8 @@ fun UserScreen(
             when (error) {
                 is HttpError -> {
                     when (error.code) {
-                        401 -> ErrorScreen(error.message.toString())
-                        404 -> ErrorScreen(error.message.toString())
                         402 -> navigateIfTokenExpired()
+                        else -> ErrorScreen(error.message.toString())
                     }
                 }
             }
@@ -85,7 +83,7 @@ fun UserScreen(
 }
 
 @Composable
-fun LoadingScreen() {
+private fun LoadingScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -96,7 +94,7 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun ErrorScreen(mes: String) {
+private fun ErrorScreen(mes: String) {
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
