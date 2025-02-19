@@ -37,7 +37,7 @@ class AuthRepositoryImpl(
 
     override suspend fun saveToken(token: Token) {
         dataStore.edit { preferences ->
-            preferences[TOKEN_KEY] = token.accessToken ?: "empty"
+            preferences[TOKEN_KEY] = token.access_token
         }
     }
 }

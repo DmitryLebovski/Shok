@@ -27,7 +27,22 @@ android {
                 "proguard-rules.pro"
             )
         }
+
+        debug {
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL_AUTH",
+                value = "\"https://auth.bellerage.com/\"",
+            )
+
+            buildConfigField(
+                type = "String",
+                name = "BASE_URL_CLIENT",
+                value = "\"https://1c.bellerage.com/bo/hs/\"",
+            )
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -37,6 +52,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 

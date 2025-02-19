@@ -27,8 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.auth.BuildConfig.*
-import kotlinx.coroutines.runBlocking
-import okhttp3.Interceptor
 
 @Composable
 fun AuthScreen(
@@ -88,19 +86,3 @@ fun Context.launchCustomTabs(url: String) {
 
 
 val Context.dataStore by preferencesDataStore("settings")
-object DataStoreManager {
-    fun customAuthInterceptor(authRepository: AuthRepository): Interceptor {
-        return Interceptor { chain ->
-            val token = runBlocking {
-                authRepository.getToken()
-            }
-            Log.d("CODEXTOKENINTERCEPTOR", token.toString())
-
-            val requestBuilder = chain.request().newBuilder()
-            if (!token?.accessToken.isNullOrEmpty()) {
-                requestBuilder.addHeader("Authorization", "Bearer ${token?.accessToken}")
-            }
-            chain.proceed(requestBuilder.build())
-        }
-    }
-}

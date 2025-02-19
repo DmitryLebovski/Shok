@@ -18,11 +18,11 @@ class AuthScreenViewModel (
 
     fun loadToken(code: String) {
         viewModelScope.launch {
-            if (authRepository.getToken()?.accessToken.isNullOrEmpty()) {
+            if (authRepository.getToken()?.access_token.isNullOrEmpty()) {
                 getTokenUseCase(code = code)
                     .onSuccess { token ->
                         try {
-                            Log.d("CODEXGETTINGTOKEN", token?.accessToken.toString())
+                            Log.d("CODEXGETTINGTOKEN", token?.access_token.toString())
                             token?.let {
                                 authRepository.saveToken(it)
                             }
@@ -34,7 +34,7 @@ class AuthScreenViewModel (
                         Log.d("AppError", throwable.toString())
                     }
             } else Log.d("CODEXTOKENEXIST", "TRUE")
-            _token.update { authRepository.getToken()?.accessToken }
+            _token.update { authRepository.getToken()?.access_token }
         }
     }
 }

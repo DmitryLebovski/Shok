@@ -35,13 +35,13 @@ fun AppNavigation(
 ) {
     val navController = rememberNavController()
     val app = LocalContext.current.applicationContext as ShokApp
-    val authComponent = remember { app.appComponent.authSubcomponent().create() }
 
+    val authComponent = remember { app.appComponent.authSubcomponent().create() }
     var startDestination by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(Unit) {
         val token = authComponent.authRepository().getToken()
-        startDestination = if (!token?.accessToken.isNullOrEmpty()) USER_SCREEN else AUTH_SCREEN
+        startDestination = if (!token?.access_token.isNullOrEmpty()) USER_SCREEN else AUTH_SCREEN
         Log.d("CODEXSTARTDEST", startDestination.toString())
     }
 

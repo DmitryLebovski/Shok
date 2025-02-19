@@ -36,7 +36,6 @@ fun NotificationScreen (
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
-
         is NotificationsUiState.Loading -> LoadingScreen()
         is NotificationsUiState.Error -> {
             val error = (uiState as NotificationsUiState.Error).error
