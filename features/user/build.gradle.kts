@@ -45,6 +45,8 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(project(":domain:user"))
     implementation(project(":core:error"))
+    implementation(project(":domain:auth"))
+    implementation(project(":domain:auth"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

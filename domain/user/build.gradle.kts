@@ -17,6 +17,8 @@ dependencies {
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.dagger)
+    implementation(project(":domain:auth"))
+    implementation(project(":core:error"))
     kapt(libs.dagger.compiler)
 }
 

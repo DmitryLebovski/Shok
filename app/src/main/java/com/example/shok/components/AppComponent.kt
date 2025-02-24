@@ -2,22 +2,19 @@ package com.example.shok.components
 
 import android.app.Application
 import com.example.shok.di.AppModule
-import com.example.shok.di.AuthViewModelModule
-import com.example.shok.di.NetworkModule
-import com.example.shok.di.NotificationViewModelModule
-import com.example.shok.di.UserViewModelModule
+import com.example.auth.AuthRepositoryModule
+import com.example.notifications.NotificationRepositoryModule
+import com.example.user.UserRepositoryModule
 import dagger.BindsInstance
 import dagger.Component
+import javax.inject.Scope
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
-    AppModule::class,
-    NetworkModule::class,
-    AuthViewModelModule::class,
-    UserViewModelModule::class,
-    NotificationViewModelModule::class
+    AppModule::class
 ])
+
 interface AppComponent {
     @Component.Factory
     interface Factory {
@@ -28,3 +25,5 @@ interface AppComponent {
     fun userSubcomponent(): UserSubcomponent.Factory
     fun notificationSubComponent(): NotificationSubcomponent.Factory
 }
+
+

@@ -24,15 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.error.HttpError
 
 @Composable
 fun NotificationScreen (
     navigateBack: () -> Unit,
-    navigateIfTokenExpired: () -> Unit,
-    provider: ProviderNotificationUseCase
+    provider: ProviderNotificationUseCase,
+    token: String
 ) {
-    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase()) }
+    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase(), token) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -40,14 +39,8 @@ fun NotificationScreen (
         is NotificationsUiState.Error -> {
             val error = (uiState as NotificationsUiState.Error).error
             Log.d("CODEXERROR", error.toString())
-            when (error) {
-                is HttpError -> {
-                    when (error.code) {
-                        402 -> navigateIfTokenExpired()
-                        else -> ErrorScreen(error.message.toString())
-                    }
-                }
-            }
+
+            ErrorScreen(error.message.toString())
         }
         is NotificationsUiState.Success -> {
             val notifications = (uiState as NotificationsUiState.Success).notificationResponse
@@ -84,13 +77,13 @@ fun NotificationScreen (
                 ) {
                     items(notifications.data) { data ->
                         NotificationCard(
-                            date = data.date ?: stringResource(R.string.unknown),
-                            unread = data.unread ?: false,
-                            projectName = data.projectName ?: stringResource(R.string.unknown),
-                            requestSubject = data.requestSubject ?: stringResource(R.string.unknown),
-                            content = data.content ?: stringResource(R.string.unknown),
-                            type = data.type ?: stringResource(R.string.unknown),
-                            initiator = data.initiator ?: stringResource(R.string.unknown)
+                            date = data.date,
+                            unread = data.unread,
+                            projectName = data.projectName,
+                            requestSubject = data.requestSubject,
+                            content = data.content,
+                            type = data.type,
+                            initiator = data.initiator
                         )
                     }
                 }

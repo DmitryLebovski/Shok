@@ -13,6 +13,6 @@ interface AuthApi {
         @Field("client_id") clientId: String = "onec_client",
         @Field("scope") scope: String = "openid",
         @Field("code") code: String,
-        @Field("redirect_uri") redirectUri: String = "bellerage://mobilelogin"
-    ): Response<Token>
+        @Field("redirect_uri") redirectUri: String = "bellerage://mobilelogin",
+    ): Response<TokenDto>
 }

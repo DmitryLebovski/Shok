@@ -17,6 +17,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.auth.AuthScreen
+import com.example.auth.Token
+import com.example.error.GlobalErrorHandler
+import com.example.error.HttpError
 import com.example.notifications.NotificationScreen
 import com.example.user.UserScreen
 import com.example.shok.Routes.AUTH_SCREEN
@@ -38,11 +41,23 @@ fun AppNavigation(
 
     val authComponent = remember { app.appComponent.authSubcomponent().create() }
     var startDestination by remember { mutableStateOf<String?>(null) }
+    var tokenValue by remember { mutableStateOf<String?>(null) }
+
+    Log.d("CODEXTOKENVALUE", tokenValue.toString())
+
 
     LaunchedEffect(Unit) {
-        val token = authComponent.authRepository().getToken()
-        startDestination = if (!token?.access_token.isNullOrEmpty()) USER_SCREEN else AUTH_SCREEN
+        startDestination = if (!code.isNullOrEmpty() && !tokenValue.isNullOrEmpty())
+            USER_SCREEN else AUTH_SCREEN
         Log.d("CODEXSTARTDEST", startDestination.toString())
+
+        GlobalErrorHandler.errorFlow.collect { error ->
+            if (error is HttpError && error.code == 402) {
+                navController.navigate(AUTH_SCREEN) {
+                    popUpTo(0)
+                }
+            }
+        }
     }
 
     if (startDestination == null) {
@@ -59,10 +74,11 @@ fun AppNavigation(
     ) {
         composable(AUTH_SCREEN) {
             AuthScreen(
-                navigate = {
+                navigate = { token ->
                     navController.navigate(USER_SCREEN) {
                         popUpTo(AUTH_SCREEN) { inclusive = true }
                     }
+                    tokenValue = token
                 },
                 provider = authComponent,
                 authCode = code
@@ -75,12 +91,8 @@ fun AppNavigation(
                 navigateToNotifications = {
                     navController.navigate(NOTIFICATION_SCREEN)
                 },
-                navigateIfTokenExpired = {
-                    navController.navigate(AUTH_SCREEN) {
-                        popUpTo(USER_SCREEN) { inclusive = true }
-                    }
-                },
-                provider = userComponent
+                provider = userComponent,
+                token = tokenValue!!
             )
         }
 
@@ -90,12 +102,8 @@ fun AppNavigation(
                 navigateBack = {
                     navController.popBackStack()
                 },
-                navigateIfTokenExpired = {
-                    navController.navigate(AUTH_SCREEN) {
-                        popUpTo(NOTIFICATION_SCREEN) { inclusive = true }
-                    }
-                },
-                provider = notificationComponent
+                provider = notificationComponent,
+                token = tokenValue!!
             )
         }
     }

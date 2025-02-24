@@ -24,23 +24,22 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.auth.BuildConfig.*
 
 @Composable
 fun AuthScreen(
-    navigate: ()-> Unit,
+    navigate: (String)-> Unit,
     provider: ProviderAuthUtils,
-    authCode: String?
+    authCode: String?,
 ) {
     val context = LocalContext.current
     val viewModel = viewModel {
         AuthScreenViewModel(
-            provider.tokenUseCase(),
-            provider.authRepository()
+            provider.tokenUseCase()
         )
     }
+
     val token by viewModel.token.collectAsState()
     Log.d("CODEXCODE", authCode.toString())
 
@@ -49,9 +48,9 @@ fun AuthScreen(
         authCode?.let {
             viewModel.loadToken(it)
 
-            if (!token.isNullOrEmpty()) {
+            if (!token?.accessToken.isNullOrEmpty()) {
                 Log.d("CODEXCODEALREADY", "NAVIGATE")
-                navigate()
+                navigate(token!!.accessToken)
             }
         }
     }
@@ -78,11 +77,8 @@ fun AuthScreen(
     }
 }
 
-
-fun Context.launchCustomTabs(url: String) {
+internal fun Context.launchCustomTabs(url: String) {
     CustomTabsIntent.Builder().build()
         .launchUrl(this, Uri.parse(url))
 }
 
-
-val Context.dataStore by preferencesDataStore("settings")

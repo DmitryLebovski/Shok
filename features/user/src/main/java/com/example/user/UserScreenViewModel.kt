@@ -9,6 +9,7 @@ import kotlinx.coroutines.launch
 
 internal class UserScreenViewModel (
     private val getInfoUseCase: GetUserInfoUseCase,
+    private val token: String
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UsersUiState>(UsersUiState.Loading)
     val uiState: StateFlow<UsersUiState> = _uiState
@@ -16,7 +17,7 @@ internal class UserScreenViewModel (
     init {
         viewModelScope.launch {
             _uiState.update { UsersUiState.Loading }
-            getInfoUseCase()
+            getInfoUseCase(token = token)
                 .onFailure { throwable ->
                     _uiState.update { UsersUiState.Error(throwable) }
                 }

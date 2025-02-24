@@ -1,20 +1,30 @@
 package com.example.notifications
 
+import com.example.error.GlobalErrorHandler
 import com.example.error.ResponseHandler
+import retrofit2.Retrofit
 
 class NotificationsRepositoryImpl(
-    private val api: NotificationApi
+    private val notificationRetrofit: Retrofit
 ) : NotificationsRepository {
-    override suspend fun getUsersNotifications(): Result<NotificationsResponse> {
+
+    private val notificationApi: NotificationApi by lazy {
+        notificationRetrofit.create(NotificationApi::class.java)
+    }
+
+    override suspend fun getUsersNotifications(token: String): Result<NotificationsResponse> {
         return try {
-            val response = api.getUserNotifications()
+            val response = notificationApi.getUserNotifications(authorization = "Bearer $token")
             println(response.toString())
             if (response.isSuccessful) {
-                Result.success(response.body()!!)
+                Result.success(response.body()!!.toDomain())
             } else {
-                Result.failure(ResponseHandler.handleResponse(response))
+                val error = ResponseHandler.handleResponse(response)
+                GlobalErrorHandler.emitError(error)
+                Result.failure(error)
             }
         } catch (e: Exception) {
+            GlobalErrorHandler.emitError(e)
             Result.failure(e)
         }
     }

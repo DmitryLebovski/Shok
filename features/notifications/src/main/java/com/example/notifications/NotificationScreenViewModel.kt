@@ -8,7 +8,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 internal class NotificationScreenViewModel (
-    private val getUserNotificationsUseCase: GetUserNotificationsUseCase
+    private val getUserNotificationsUseCase: GetUserNotificationsUseCase,
+    private val token: String
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<NotificationsUiState>(NotificationsUiState.Loading)
     val uiState: StateFlow<NotificationsUiState> = _uiState
@@ -16,7 +17,7 @@ internal class NotificationScreenViewModel (
     init {
         viewModelScope.launch {
             _uiState.update { NotificationsUiState.Loading }
-            getUserNotificationsUseCase()
+            getUserNotificationsUseCase(token = token)
                 .onFailure { throwable ->
                     _uiState.update { NotificationsUiState.Error(throwable) }
                 }

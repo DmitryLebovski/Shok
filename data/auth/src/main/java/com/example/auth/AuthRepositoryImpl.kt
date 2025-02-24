@@ -1,43 +1,37 @@
 package com.example.auth
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
-import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
+import com.example.error.GlobalErrorHandler
+import com.example.error.ResponseHandler
+import retrofit2.Retrofit
 
 class AuthRepositoryImpl(
-    private val api: AuthApi,
-    private val dataStore: DataStore<Preferences>
+    private val authRetrofit: Retrofit
 ): AuthRepository {
-    companion object {
-        private val TOKEN_KEY = stringPreferencesKey("auth_token")
+
+    private val authApi: AuthApi by lazy {
+        authRetrofit.create(AuthApi::class.java)
     }
 
-    override suspend fun getTokenFromApi(code: String): Result<Token?> {
-        return try {
-            val response = api.postTokenByCode(code = code)
-            if (response.isSuccessful) {
-                Result.success(response.body())
-            } else {
-                Result.failure(Throwable(response.code().toString()))
+    private var cachedToken: Token? = null
+
+    override suspend fun getToken(code: String): Result<Token> {
+        return if (cachedToken != null) {
+            Result.success(cachedToken!!)
+        } else {
+            try {
+                val response = authApi.postTokenByCode(code = code)
+                if (response.isSuccessful) {
+                    cachedToken = response.body()!!.toDomain()
+                    Result.success(cachedToken!!)
+                } else {
+                    val error = ResponseHandler.handleResponse(response)
+                    GlobalErrorHandler.emitError(error)
+                    Result.failure(error)
+                }
+            } catch (e: Exception) {
+                GlobalErrorHandler.emitError(e)
+                Result.failure(e)
             }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    override suspend fun getToken(): Token? {
-        return dataStore.data.map { preferences ->
-            preferences[TOKEN_KEY]?.let { Token(it) }
-        }.firstOrNull()
-    }
-
-
-    override suspend fun saveToken(token: Token) {
-        dataStore.edit { preferences ->
-            preferences[TOKEN_KEY] = token.access_token
         }
     }
 }

@@ -69,7 +69,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.dagger)
     implementation(libs.androidx.browser)
-    implementation(libs.datastore.preferences)
     androidTestImplementation(libs.kotlin.test.junit)
     kapt(libs.dagger.compiler)
 }

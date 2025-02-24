@@ -1,6 +1,7 @@
 package com.example.notifications
 
 import retrofit2.Response
+import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Query
 
@@ -11,5 +12,6 @@ interface NotificationApi {
         @Query("page") page: Int = 1,
         @Query("perPage") perPage: Int = 20,
         @Query("unread") unread: Boolean = true,
-    ): Response<NotificationsResponse>
+        @Header("Authorization") authorization: String
+    ): Response<NotificationsResponseDto>
 }

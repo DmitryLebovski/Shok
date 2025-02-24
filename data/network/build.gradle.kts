@@ -14,16 +14,14 @@ kotlin {
 }
 
 dependencies {
-    implementation(project(":domain:auth"))
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
-    implementation(project(":core:error"))
 
     implementation(libs.dagger)
-    implementation(project(":data:network"))
     kapt(libs.dagger.compiler)
 }
 
 kapt {
     correctErrorTypes = true
 }
+

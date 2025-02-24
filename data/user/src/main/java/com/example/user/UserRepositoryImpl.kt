@@ -1,19 +1,29 @@
 package com.example.user
 
+import com.example.error.GlobalErrorHandler
 import com.example.error.ResponseHandler
+import retrofit2.Retrofit
 
 class UserRepositoryImpl(
-    private val api: UserApi
+    private val userRetrofit: Retrofit
 ) : UserRepository {
-    override suspend fun getUserInfo(): Result<UserInfo> {
+
+    private val userApi: UserApi by lazy {
+        userRetrofit.create(UserApi::class.java)
+    }
+
+    override suspend fun getUserInfo(token: String): Result<UserInfo> {
         return try {
-            val response = api.getUserInfo()
+            val response = userApi.getUserInfo("Bearer $token")
             if (response.isSuccessful) {
-                Result.success(response.body()!!)
+                Result.success(response.body()!!.toDomain())
             } else {
-                Result.failure(ResponseHandler.handleResponse(response))
+                val error = ResponseHandler.handleResponse(response)
+                GlobalErrorHandler.emitError(error)
+                Result.failure(error)
             }
         } catch (e: Exception) {
+            GlobalErrorHandler.emitError(e)
             Result.failure(e)
         }
     }

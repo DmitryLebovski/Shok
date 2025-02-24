@@ -12,8 +12,3 @@ object ResponseHandler {
         return HttpError(code, url)
     }
 }
-
-//class CodableThrowable(val code: Int, str: String): Throwable(str)
-//
-//sealed class MyErrors(url: String): Throwable(url)
-//class HttpError(val code: Int,  url: String): MyErrors(url)

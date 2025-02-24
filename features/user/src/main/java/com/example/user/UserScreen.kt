@@ -23,15 +23,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.error.HttpError
 
 @Composable
 fun UserScreen(
     navigateToNotifications: () -> Unit,
-    navigateIfTokenExpired: () -> Unit,
-    provider: ProviderUserUseCase
+    provider: ProviderUserUseCase,
+    token: String
 ) {
-    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase()) }
+    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase(), token) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -39,14 +38,8 @@ fun UserScreen(
         is UsersUiState.Error -> {
             val error = (uiState as UsersUiState.Error).error
             Log.d("CODEXERROR", error.toString())
-            when (error) {
-                is HttpError -> {
-                    when (error.code) {
-                        402 -> navigateIfTokenExpired()
-                        else -> ErrorScreen(error.message.toString())
-                    }
-                }
-            }
+
+            ErrorScreen(error.message.toString())
         }
         is UsersUiState.Success -> {
             val userData = (uiState as UsersUiState.Success).userData

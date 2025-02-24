@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.datastore.core.android)
     implementation(project(":data:notifications"))
     implementation(project(":domain:notifications"))
+    implementation(project(":core:error"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
