@@ -20,8 +20,10 @@ dependencies {
     implementation(project(":core:error"))
 
     implementation(libs.dagger)
-    implementation(project(":data:network"))
+    implementation(project(":domain:auth"))
+    implementation(project(":core:settings"))
     kapt(libs.dagger.compiler)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1")
 }
 
 kapt {

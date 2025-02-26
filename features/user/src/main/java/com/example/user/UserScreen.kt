@@ -27,10 +27,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun UserScreen(
     navigateToNotifications: () -> Unit,
-    provider: ProviderUserUseCase,
-    token: String
+    provider: ProviderUserUseCase
 ) {
-    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase(), token) }
+    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase()) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {

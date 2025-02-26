@@ -14,7 +14,7 @@ class AuthScreenViewModel (
     private val _token = MutableStateFlow<Token?>(null)
     val token: StateFlow<Token?> = _token
 
-    fun loadToken(code: String) {
+    fun loadToken(code: String): Boolean {
         viewModelScope.launch {
             getTokenUseCase(code = code)
                 .onSuccess { token ->
@@ -22,13 +22,14 @@ class AuthScreenViewModel (
                         Log.d("CODEXGETTINGTOKEN", token.accessToken)
                         _token.emit(token)
                     } catch (e: Exception) {
-                        Log.d("AppError", e.toString())
+                        Log.d("CODEXERROR", e.toString())
                     }
                 }
                 .onFailure { throwable ->
-                    Log.d("AppError", throwable.toString())
+                    Log.d("CODEXERROR", "$throwable $code")
                 }
         }
+        return true
     }
 }
 

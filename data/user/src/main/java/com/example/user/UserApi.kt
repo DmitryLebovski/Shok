@@ -6,7 +6,5 @@ import retrofit2.http.Header
 
 interface UserApi {
     @GET("ReactWeb/user_info")
-    suspend fun getUserInfo(
-        @Header("Authorization") authorization: String
-    ): Response<UserInfoDto>
+    suspend fun getUserInfo(): Response<UserInfoDto>
 }

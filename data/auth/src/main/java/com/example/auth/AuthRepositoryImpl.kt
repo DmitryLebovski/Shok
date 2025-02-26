@@ -1,35 +1,36 @@
 package com.example.auth
 
-import com.example.error.GlobalErrorHandler
+import com.example.error.NetworkErrorHandler
 import com.example.error.ResponseHandler
-import retrofit2.Retrofit
+import java.util.concurrent.atomic.AtomicReference
+import com.example.settings.NetworkSettings
 
 class AuthRepositoryImpl(
-    private val authRetrofit: Retrofit
+    private val settings: NetworkSettings
 ): AuthRepository {
 
-    private val authApi: AuthApi by lazy {
-        authRetrofit.create(AuthApi::class.java)
-    }
-
-    private var cachedToken: Token? = null
+    private val authApi: AuthApi by lazy { AuthNetworking.getAuthApi(settings) }
+    private var cachedToken: AtomicReference<Token?> = AtomicReference(null)
 
     override suspend fun getToken(code: String): Result<Token> {
-        return if (cachedToken != null) {
-            Result.success(cachedToken!!)
+        val currentToken = cachedToken.get()
+
+        return if (!currentToken?.accessToken.isNullOrEmpty()) {
+            Result.success(currentToken!!)
         } else {
             try {
                 val response = authApi.postTokenByCode(code = code)
                 if (response.isSuccessful) {
-                    cachedToken = response.body()!!.toDomain()
-                    Result.success(cachedToken!!)
+                    val newToken = response.body()!!.toDomain()
+                    cachedToken.set(newToken)
+                    Result.success(newToken)
                 } else {
                     val error = ResponseHandler.handleResponse(response)
-                    GlobalErrorHandler.emitError(error)
+                    NetworkErrorHandler.emitError(error)
                     Result.failure(error)
                 }
             } catch (e: Exception) {
-                GlobalErrorHandler.emitError(e)
+                NetworkErrorHandler.emitError(e)
                 Result.failure(e)
             }
         }

@@ -1,20 +1,23 @@
 package com.example.auth
 
-import com.example.network.AuthRetrofit
+import com.example.settings.NetworkSettings
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
+import javax.inject.Singleton
 
 @Module
 object AuthRepositoryModule {
     @Provides
-    fun provideRetrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("https://auth.bellerage.com/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    @Named("auth")
+    fun provideAuthSettings(): NetworkSettings {
+        return NetworkSettings("https://auth.bellerage.com/")
+    }
 
     @Provides
-    fun provideAuthRepository(retrofit: Retrofit): AuthRepository =
-        AuthRepositoryImpl(retrofit)
+    @Singleton
+    fun provideAuthRepository(
+        @Named("auth") networkSettings: NetworkSettings
+    ): AuthRepository =
+        AuthRepositoryImpl(networkSettings)
 }

@@ -29,7 +29,7 @@ import com.example.auth.BuildConfig.*
 
 @Composable
 fun AuthScreen(
-    navigate: (String)-> Unit,
+    navigate: (Boolean)-> Unit,
     provider: ProviderAuthUtils,
     authCode: String?,
 ) {
@@ -46,11 +46,10 @@ fun AuthScreen(
 
     LaunchedEffect(token) {
         authCode?.let {
-            viewModel.loadToken(it)
+            if (viewModel.loadToken(it) && !token?.accessToken.isNullOrEmpty()) {
+                Log.d("CODEXCODEALREADY", "navigate")
 
-            if (!token?.accessToken.isNullOrEmpty()) {
-                Log.d("CODEXCODEALREADY", "NAVIGATE")
-                navigate(token!!.accessToken)
+                navigate(true)
             }
         }
     }

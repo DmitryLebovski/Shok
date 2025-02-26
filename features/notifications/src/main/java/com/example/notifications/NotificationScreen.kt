@@ -28,10 +28,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 @Composable
 fun NotificationScreen (
     navigateBack: () -> Unit,
-    provider: ProviderNotificationUseCase,
-    token: String
+    provider: ProviderNotificationUseCase
 ) {
-    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase(), token) }
+    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase()) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {

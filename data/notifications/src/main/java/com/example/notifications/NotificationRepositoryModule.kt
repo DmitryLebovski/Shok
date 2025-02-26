@@ -1,20 +1,27 @@
 package com.example.notifications
 
-import com.example.network.UserRetrofit
+import com.example.auth.AuthRepository
+import com.example.settings.NetworkSettings
 import dagger.Module
 import dagger.Provides
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Named
 
 @Module
 object NotificationRepositoryModule {
     @Provides
-    fun provideRetrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("https://1c.bellerage.com/bo/hs/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    @Named("notification")
+    fun provideNotificationSettings(): NetworkSettings {
+        return NetworkSettings("https://1c.bellerage.com/bo/hs/")
+    }
 
     @Provides
-    fun provideNotificationRepository(retrofit: Retrofit): NotificationsRepository =
-        NotificationsRepositoryImpl(retrofit)
+    fun provideNotificationRepository(
+        authRepository: AuthRepository,
+        @Named("notification") networkSettings: NetworkSettings
+    ): NotificationsRepository {
+        return NotificationsRepositoryImpl(
+            networkSettings,
+            authRepository
+        )
+    }
 }

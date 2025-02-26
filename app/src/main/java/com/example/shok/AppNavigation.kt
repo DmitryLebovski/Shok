@@ -17,8 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.auth.AuthScreen
-import com.example.auth.Token
-import com.example.error.GlobalErrorHandler
+import com.example.error.NetworkErrorHandler
 import com.example.error.HttpError
 import com.example.notifications.NotificationScreen
 import com.example.user.UserScreen
@@ -41,18 +40,16 @@ fun AppNavigation(
 
     val authComponent = remember { app.appComponent.authSubcomponent().create() }
     var startDestination by remember { mutableStateOf<String?>(null) }
-    var tokenValue by remember { mutableStateOf<String?>(null) }
-
-    Log.d("CODEXTOKENVALUE", tokenValue.toString())
-
+    var isTokenAvailable by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        startDestination = if (!code.isNullOrEmpty() && !tokenValue.isNullOrEmpty())
+        startDestination = if (!code.isNullOrEmpty() && isTokenAvailable)
             USER_SCREEN else AUTH_SCREEN
         Log.d("CODEXSTARTDEST", startDestination.toString())
 
-        GlobalErrorHandler.errorFlow.collect { error ->
+        NetworkErrorHandler.errorFlow.collect { error ->
             if (error is HttpError && error.code == 402) {
+                Log.d("CODEXERRORNAVBACK", error.code.toString())
                 navController.navigate(AUTH_SCREEN) {
                     popUpTo(0)
                 }
@@ -74,11 +71,11 @@ fun AppNavigation(
     ) {
         composable(AUTH_SCREEN) {
             AuthScreen(
-                navigate = { token ->
+                navigate = { isAvailable ->
                     navController.navigate(USER_SCREEN) {
                         popUpTo(AUTH_SCREEN) { inclusive = true }
                     }
-                    tokenValue = token
+                    isTokenAvailable = isAvailable
                 },
                 provider = authComponent,
                 authCode = code
@@ -91,8 +88,7 @@ fun AppNavigation(
                 navigateToNotifications = {
                     navController.navigate(NOTIFICATION_SCREEN)
                 },
-                provider = userComponent,
-                token = tokenValue!!
+                provider = userComponent
             )
         }
 
@@ -102,8 +98,7 @@ fun AppNavigation(
                 navigateBack = {
                     navController.popBackStack()
                 },
-                provider = notificationComponent,
-                token = tokenValue!!
+                provider = notificationComponent
             )
         }
     }

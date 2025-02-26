@@ -1,10 +1,9 @@
 package com.example.shok.components
 
 import com.example.auth.ProviderAuthUtils
-import com.example.auth.AuthRepositoryModule
 import dagger.Subcomponent
 
-@Subcomponent(modules = [AuthRepositoryModule::class])
+@Subcomponent
 interface AuthSubcomponent: ProviderAuthUtils {
 
     @Subcomponent.Factory

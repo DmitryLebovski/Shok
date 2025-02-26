@@ -1,29 +1,29 @@
 package com.example.user
 
-import com.example.error.GlobalErrorHandler
+import com.example.auth.AuthRepository
+import com.example.error.NetworkErrorHandler
 import com.example.error.ResponseHandler
-import retrofit2.Retrofit
+import com.example.settings.NetworkSettings
 
 class UserRepositoryImpl(
-    private val userRetrofit: Retrofit
+    private val settings: NetworkSettings,
+    private val authRepository: AuthRepository
 ) : UserRepository {
 
-    private val userApi: UserApi by lazy {
-        userRetrofit.create(UserApi::class.java)
-    }
+    private val userApi: UserApi by lazy { UserNetworking.getUserApi(settings, authRepository) }
 
-    override suspend fun getUserInfo(token: String): Result<UserInfo> {
+    override suspend fun getUserInfo(): Result<UserInfo> {
         return try {
-            val response = userApi.getUserInfo("Bearer $token")
+            val response = userApi.getUserInfo()
             if (response.isSuccessful) {
                 Result.success(response.body()!!.toDomain())
             } else {
                 val error = ResponseHandler.handleResponse(response)
-                GlobalErrorHandler.emitError(error)
+                NetworkErrorHandler.emitError(error)
                 Result.failure(error)
             }
         } catch (e: Exception) {
-            GlobalErrorHandler.emitError(e)
+            NetworkErrorHandler.emitError(e)
             Result.failure(e)
         }
     }

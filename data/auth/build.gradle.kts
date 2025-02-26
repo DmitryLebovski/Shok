@@ -18,9 +18,8 @@ dependencies {
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
     implementation(project(":core:error"))
-
     implementation(libs.dagger)
-    implementation(project(":data:network"))
+    implementation(project(":core:settings"))
     kapt(libs.dagger.compiler)
 }
 

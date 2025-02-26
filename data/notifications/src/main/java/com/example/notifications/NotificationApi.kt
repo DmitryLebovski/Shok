@@ -11,7 +11,6 @@ interface NotificationApi {
         @Query("channel") channel: String = "web",
         @Query("page") page: Int = 1,
         @Query("perPage") perPage: Int = 20,
-        @Query("unread") unread: Boolean = true,
-        @Header("Authorization") authorization: String
+        @Query("unread") unread: Boolean = true
     ): Response<NotificationsResponseDto>
 }
