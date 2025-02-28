@@ -12,17 +12,19 @@ class AuthRepositoryImpl(
     private val authApi: AuthApi by lazy { AuthNetworking.getAuthApi(settings) }
     private var cachedToken: AtomicReference<Token?> = AtomicReference(null)
 
-    override suspend fun getToken(code: String): Result<Token> {
+    override suspend fun getToken(): Result<Token> {
         val currentToken = cachedToken.get()
+        val code = AuthCodeHolder.code
 
         return if (!currentToken?.accessToken.isNullOrEmpty()) {
             Result.success(currentToken!!)
         } else {
             try {
-                val response = authApi.postTokenByCode(code = code)
+                val response = authApi.postTokenByCode(code = code.toString())
                 if (response.isSuccessful) {
                     val newToken = response.body()!!.toDomain()
                     cachedToken.set(newToken)
+                    AuthCodeHolder.clearCode()
                     Result.success(newToken)
                 } else {
                     val error = ResponseHandler.handleResponse(response)

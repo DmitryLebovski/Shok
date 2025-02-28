@@ -24,5 +24,3 @@ object AuthNetworking {
         return currentApi
     }
 }
-
-//getAndSet возвращает значение, а потом устанваливет новое

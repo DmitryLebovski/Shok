@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.auth.AuthCodeHolder.code
 import com.example.auth.AuthScreen
 import com.example.error.NetworkErrorHandler
 import com.example.error.HttpError
@@ -32,19 +33,14 @@ object Routes {
 }
 
 @Composable
-fun AppNavigation(
-    code: String?
-) {
+fun AppNavigation() {
     val navController = rememberNavController()
     val app = LocalContext.current.applicationContext as ShokApp
 
-    val authComponent = remember { app.appComponent.authSubcomponent().create() }
     var startDestination by remember { mutableStateOf<String?>(null) }
-    var isTokenAvailable by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
-        startDestination = if (!code.isNullOrEmpty() && isTokenAvailable)
-            USER_SCREEN else AUTH_SCREEN
+        startDestination = if (!code.isNullOrEmpty()) USER_SCREEN else AUTH_SCREEN
         Log.d("CODEXSTARTDEST", startDestination.toString())
 
         NetworkErrorHandler.errorFlow.collect { error ->
@@ -70,16 +66,7 @@ fun AppNavigation(
         modifier = Modifier.fillMaxSize()
     ) {
         composable(AUTH_SCREEN) {
-            AuthScreen(
-                navigate = { isAvailable ->
-                    navController.navigate(USER_SCREEN) {
-                        popUpTo(AUTH_SCREEN) { inclusive = true }
-                    }
-                    isTokenAvailable = isAvailable
-                },
-                provider = authComponent,
-                authCode = code
-            )
+            AuthScreen()
         }
 
         composable(USER_SCREEN) {

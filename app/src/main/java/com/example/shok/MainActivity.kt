@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.auth.AuthCodeHolder
 import com.example.shok.ui.theme.ShokTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,17 +23,19 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     modifier = Modifier.fillMaxSize()
                 ) {
-                    AppNavigation(handleIntent(intent))
+                    AppNavigation()
                 }
             }
         }
+        handleIntent(intent)
     }
 
-    private fun handleIntent(intent: Intent?): String? {
+    private fun handleIntent(intent: Intent?) {
         val uri = intent?.data
         Log.d("CODEXURI", uri.toString())
-        return if (uri?.scheme == "bellerage" && uri.host == "mobilelogin") {
-            uri.getQueryParameter("code")
-        } else null
+
+        if (uri?.scheme == "bellerage" && uri.host == "mobilelogin") {
+            uri.getQueryParameter("code")?.let { AuthCodeHolder.code = it }
+        }
     }
 }
