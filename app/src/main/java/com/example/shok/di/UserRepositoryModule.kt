@@ -1,7 +1,9 @@
-package com.example.user
+package com.example.shok.di
 
 import com.example.auth.AuthRepository
 import com.example.settings.NetworkSettings
+import com.example.user.UserRepository
+import com.example.user.UserRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import javax.inject.Named

@@ -1,5 +1,7 @@
-package com.example.auth
+package com.example.shok.di
 
+import com.example.auth.AuthRepository
+import com.example.auth.AuthRepositoryImpl
 import com.example.settings.NetworkSettings
 import dagger.Module
 import dagger.Provides

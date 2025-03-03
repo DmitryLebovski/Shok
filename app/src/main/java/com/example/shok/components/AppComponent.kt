@@ -2,7 +2,7 @@ package com.example.shok.components
 
 import android.app.Application
 import com.example.auth.AuthRepository
-import com.example.auth.AuthRepositoryModule
+import com.example.shok.di.AuthRepositoryModule
 import com.example.shok.di.AppModule
 import dagger.BindsInstance
 import dagger.Component

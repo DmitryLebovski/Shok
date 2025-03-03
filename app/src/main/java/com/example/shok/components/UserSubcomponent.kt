@@ -1,6 +1,6 @@
 package com.example.shok.components
 
-import com.example.user.UserRepositoryModule
+import com.example.shok.di.UserRepositoryModule
 import com.example.user.ProviderUserUseCase
 import dagger.Subcomponent
 

@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -23,13 +25,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.notifications.ProviderNotificationUseCase
 
 @Composable
 fun UserScreen(
     navigateToNotifications: () -> Unit,
-    provider: ProviderUserUseCase
+    providerUser: ProviderUserUseCase,
+    providerNotification: ProviderNotificationUseCase
 ) {
-    val viewModel = viewModel { UserScreenViewModel(provider.infoUseCase()) }
+    val viewModel = viewModel { UserScreenViewModel(
+        GetCombinedUserNotificationsUseCase(
+            providerUser.infoUseCase(), providerNotification.notificationUseCase())
+    ) }
+
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -46,10 +54,13 @@ fun UserScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 24.dp),
-                verticalArrangement = Arrangement.Center,
+                    .padding(horizontal = 24.dp)
+                    .verticalScroll(rememberScrollState(), true),
+                verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Spacer(modifier = Modifier.padding(16.dp))
+
                 Button(
                     onClick = { navigateToNotifications() },
                     modifier = Modifier
@@ -66,7 +77,7 @@ fun UserScreen(
                     )
                 }
 
-                Spacer(modifier = Modifier.padding(24.dp))
+                Spacer(modifier = Modifier.padding(8.dp))
 
                 Text(userData.toString())
             }

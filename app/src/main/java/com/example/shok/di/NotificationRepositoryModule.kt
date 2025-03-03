@@ -1,6 +1,8 @@
-package com.example.notifications
+package com.example.shok.di
 
 import com.example.auth.AuthRepository
+import com.example.notifications.NotificationsRepository
+import com.example.notifications.NotificationsRepositoryImpl
 import com.example.settings.NetworkSettings
 import dagger.Module
 import dagger.Provides

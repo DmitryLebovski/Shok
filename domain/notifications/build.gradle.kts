@@ -13,7 +13,6 @@ kotlin {
     }
 }
 dependencies {
-    implementation(project(":domain:user"))
     implementation (libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.dagger)

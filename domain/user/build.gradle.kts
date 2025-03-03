@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.dagger)
     implementation(project(":domain:auth"))
     implementation(project(":core:error"))
+    implementation(project(":domain:notifications"))
     kapt(libs.dagger.compiler)
 }
 

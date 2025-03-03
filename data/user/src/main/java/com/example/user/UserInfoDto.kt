@@ -32,6 +32,7 @@ fun UserInfoDto.toDomain(): UserInfo {
         dashboardAccess = dashboardAccess ?: false,
         hasAccessToAccount = hasAccessToAccount ?: false,
         unpaidInvoicesCount = unpaidInvoicesCount ?: 0,
-        requestSectionId = requestSectionId ?: "empty"
+        requestSectionId = requestSectionId ?: "empty",
+        notifications = emptyList()
     )
 }

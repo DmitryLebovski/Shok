@@ -60,27 +60,30 @@ fun AppNavigation() {
         return
     }
 
+    val userComponent = remember { app.appComponent.userSubcomponent().create() }
+    val notificationComponent = remember { app.appComponent.notificationSubComponent().create() }
+
     NavHost(
         navController = navController,
         startDestination = startDestination!!,
         modifier = Modifier.fillMaxSize()
     ) {
+
         composable(AUTH_SCREEN) {
             AuthScreen()
         }
 
         composable(USER_SCREEN) {
-            val userComponent = remember { app.appComponent.userSubcomponent().create() }
             UserScreen(
                 navigateToNotifications = {
                     navController.navigate(NOTIFICATION_SCREEN)
                 },
-                provider = userComponent
+                providerUser = userComponent,
+                providerNotification = notificationComponent
             )
         }
 
         composable(NOTIFICATION_SCREEN) {
-            val notificationComponent = remember { app.appComponent.notificationSubComponent().create() }
             NotificationScreen(
                 navigateBack = {
                     navController.popBackStack()

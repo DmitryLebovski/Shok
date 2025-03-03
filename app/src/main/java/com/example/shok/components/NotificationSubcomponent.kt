@@ -1,7 +1,7 @@
 package com.example.shok.components
 
 import com.example.notifications.ProviderNotificationUseCase
-import com.example.notifications.NotificationRepositoryModule
+import com.example.shok.di.NotificationRepositoryModule
 import dagger.Subcomponent
 
 @Subcomponent(modules = [NotificationRepositoryModule::class])
