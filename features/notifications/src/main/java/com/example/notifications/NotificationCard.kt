@@ -21,6 +21,7 @@ fun NotificationCard(
     requestSubject: String,
     content: String,
     type: String,
+    id: String,
     initiator: String
 ) {
     Card(
@@ -62,6 +63,10 @@ fun NotificationCard(
             )
             Text(
                 text = stringResource(R.string.initiator, initiator),
+                modifier = Modifier.padding(top = 8.dp)
+            )
+            Text(
+                text = stringResource(R.string.id, id),
                 modifier = Modifier.padding(top = 8.dp)
             )
 

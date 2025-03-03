@@ -60,8 +60,7 @@ fun AppNavigation() {
         return
     }
 
-    val userComponent = remember { app.appComponent.userSubcomponent().create() }
-    val notificationComponent = remember { app.appComponent.notificationSubComponent().create() }
+    val combinedComponent = remember { app.appComponent.combinedSubComponent().create() }.combinedUseCase()
 
     NavHost(
         navController = navController,
@@ -78,8 +77,7 @@ fun AppNavigation() {
                 navigateToNotifications = {
                     navController.navigate(NOTIFICATION_SCREEN)
                 },
-                providerUser = userComponent,
-                providerNotification = notificationComponent
+                provider = combinedComponent
             )
         }
 
@@ -88,7 +86,7 @@ fun AppNavigation() {
                 navigateBack = {
                     navController.popBackStack()
                 },
-                provider = notificationComponent
+                provider = combinedComponent
             )
         }
     }

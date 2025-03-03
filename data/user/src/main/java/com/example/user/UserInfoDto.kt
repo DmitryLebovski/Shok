@@ -1,5 +1,6 @@
 package com.example.user
 
+import com.example.notifications.NotificationsResponse
 import com.google.gson.annotations.SerializedName
 
 data class UserInfoDto (
@@ -33,6 +34,12 @@ fun UserInfoDto.toDomain(): UserInfo {
         hasAccessToAccount = hasAccessToAccount ?: false,
         unpaidInvoicesCount = unpaidInvoicesCount ?: 0,
         requestSectionId = requestSectionId ?: "empty",
-        notifications = emptyList()
+        notifications = NotificationsResponse(
+            count = 0,
+            page = 0,
+            perPage = 0,
+            channel = "empty",
+            data = emptyList()
+        )
     )
 }

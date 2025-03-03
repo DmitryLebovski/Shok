@@ -47,7 +47,6 @@ dependencies {
     implementation(project(":domain:notifications"))
     implementation(project(":core:error"))
     implementation(project(":domain:auth"))
-    implementation(project(":features:notifications"))
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

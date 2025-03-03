@@ -16,7 +16,7 @@ internal class UserScreenViewModel (
     init {
         viewModelScope.launch {
             _uiState.update { UsersUiState.Loading }
-            getCombinedUserNotificationsUseCase()
+            getCombinedUserNotificationsUseCase(true)
                 .onFailure { throwable ->
                     _uiState.update { UsersUiState.Error(throwable) }
                 }

@@ -20,9 +20,7 @@ interface AppComponent {
         fun create(@BindsInstance application: Application): AppComponent
     }
 
-    fun userSubcomponent(): UserSubcomponent.Factory
-    fun notificationSubComponent(): NotificationSubcomponent.Factory
-
+    fun combinedSubComponent(): CombinedSubcomponent.Factory
     fun authRepository(): AuthRepository
 }
 

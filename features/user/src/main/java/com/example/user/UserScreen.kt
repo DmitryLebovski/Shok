@@ -25,18 +25,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.notifications.ProviderNotificationUseCase
 
 @Composable
 fun UserScreen(
     navigateToNotifications: () -> Unit,
-    providerUser: ProviderUserUseCase,
-    providerNotification: ProviderNotificationUseCase
+    provider: GetCombinedUserNotificationsUseCase,
 ) {
-    val viewModel = viewModel { UserScreenViewModel(
-        GetCombinedUserNotificationsUseCase(
-            providerUser.infoUseCase(), providerNotification.notificationUseCase())
-    ) }
+    val viewModel = viewModel { UserScreenViewModel(provider) }
 
     val uiState by viewModel.uiState.collectAsState()
 

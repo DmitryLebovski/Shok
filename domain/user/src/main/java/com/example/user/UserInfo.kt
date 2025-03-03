@@ -1,6 +1,6 @@
 package com.example.user
 
-import com.example.notifications.Data
+import com.example.notifications.NotificationsResponse
 
 data class UserInfo (
     val isClient: Boolean,
@@ -17,5 +17,5 @@ data class UserInfo (
     val unpaidInvoicesCount: Int,
     val requestSectionId: String,
 
-    val notifications: List<Data>
+    val notifications: NotificationsResponse
 )

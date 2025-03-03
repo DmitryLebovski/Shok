@@ -24,13 +24,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.user.GetCombinedUserNotificationsUseCase
 
 @Composable
 fun NotificationScreen (
     navigateBack: () -> Unit,
-    provider: ProviderNotificationUseCase
+    provider: GetCombinedUserNotificationsUseCase
 ) {
-    val viewModel = viewModel { NotificationScreenViewModel(provider.notificationUseCase()) }
+    val viewModel = viewModel { NotificationScreenViewModel(provider) }
     val uiState by viewModel.uiState.collectAsState()
 
     when(uiState) {
@@ -82,6 +83,7 @@ fun NotificationScreen (
                             requestSubject = data.requestSubject,
                             content = data.content,
                             type = data.type,
+                            id = data.id,
                             initiator = data.initiator
                         )
                     }
